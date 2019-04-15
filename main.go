@@ -1,0 +1,109 @@
+package main
+
+import (
+	"bufio"
+	"flag"
+	"fmt"
+	"github.com/mpetavy/common"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
+)
+
+var (
+	path    = flag.String("p", "", "working dir")
+	test    = flag.Bool("t", false, "only check")
+	exclude = flag.String("x", ".idea", "exclude files")
+
+	excludes map[string]bool
+)
+
+func run() error {
+	cmd := exec.Command("svn", "info")
+	if *path == "" {
+		dir, err := os.Getwd()
+		if err != nil {
+			return nil
+		}
+
+		path = &dir
+	}
+
+	cmd.Dir = *path
+
+	b, err := cmd.Output()
+	if err != nil {
+		return err
+	}
+
+	output, err := common.ToUTF8String(string(b[:]), common.DefaultEncoding())
+	if err != nil {
+		return err
+	}
+
+	if strings.Index(strings.ToLower(output), "revision:") == -1 {
+		return fmt.Errorf("the path %s is not a working copy", *path)
+	}
+
+	cmd = exec.Command("svn", "status")
+	if err != nil {
+		return err
+	}
+
+	cmd.Dir = *path
+
+	b, err = cmd.Output()
+	if err != nil {
+		return err
+	}
+
+	output, err = common.ToUTF8String(string(b[:]), common.DefaultEncoding())
+	if err != nil {
+		return err
+	}
+
+	scanner := bufio.NewScanner(strings.NewReader(output))
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if strings.HasPrefix(line, "?") {
+			file := strings.TrimSpace(line[1:])
+
+			for _, item := range strings.Split(*exclude, ";") {
+				if item == file {
+					common.Info("skip %s", file)
+					continue
+				}
+			}
+
+			fp := filepath.Join(*path, file)
+
+			b, err := common.FileExists(fp)
+			if err != nil {
+				return err
+			}
+
+			if b {
+				if *test {
+					common.Info("delete %s [simulate]", fp)
+				} else {
+					common.Info("delete %s", fp)
+					err := os.RemoveAll(fp)
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func main() {
+	defer common.Cleanup()
+
+	common.New(&common.App{"cleansvn", "1.0.0", "2018", "Tool to clean a subversion controlled dir", "mpetavy", common.APACHE, "https://github.com/mpetavy/cleansvn", false, nil,nil, nil, run, 0}, nil)
+	common.Run()
+}
