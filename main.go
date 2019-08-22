@@ -104,6 +104,6 @@ func run() error {
 func main() {
 	defer common.Cleanup()
 
-	common.New(&common.App{"cleansvn", "1.0.0", "2018", "Tool to clean a subversion controlled dir", "mpetavy", common.APACHE, "https://github.com/mpetavy/cleansvn", false, nil,nil, nil, run, 0}, nil)
+	common.New(&common.App{"cleansvn", "1.0.0", "2018", "Tool to clean a subversion controlled dir", "mpetavy", common.APACHE, "https://github.com/mpetavy/cleansvn", false, nil, nil, run, 0}, nil)
 	common.Run()
 }
