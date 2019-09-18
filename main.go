@@ -20,7 +20,7 @@ var (
 )
 
 func init() {
-	common.Init("cleansvn", "1.0.0", "2018", "Tool to clean a subversion controlled dir", "mpetavy", common.APACHE, "https://github.com/mpetavy/cleansvn", false, nil, nil, run, 0)
+	common.Init("1.0.0", "2018", "Tool to clean a subversion controlled dir", "mpetavy", common.APACHE, false, nil, nil, run, 0)
 }
 
 func run() error {
