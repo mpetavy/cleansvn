@@ -15,12 +15,10 @@ var (
 	path    = flag.String("p", "", "working dir")
 	test    = flag.Bool("t", false, "only check")
 	exclude = flag.String("x", ".idea", "exclude files")
-
-	excludes map[string]bool
 )
 
 func init() {
-	common.Init(false, "1.0.0", "2018", "Tool to clean a subversion controlled dir", "mpetavy", fmt.Sprintf("https://github.com/mpetavy/%s", common.Title()), common.APACHE, nil, nil, run, 0)
+	common.Init(false, "1.0.0", "", "2018", "Tool to clean a subversion controlled dir", "mpetavy", fmt.Sprintf("https://github.com/mpetavy/%s", common.Title()), common.APACHE, nil, nil, run, 0)
 }
 
 func run() error {
@@ -51,9 +49,6 @@ func run() error {
 	}
 
 	cmd = exec.Command("svn", "status")
-	if err != nil {
-		return err
-	}
 
 	cmd.Dir = *path
 
