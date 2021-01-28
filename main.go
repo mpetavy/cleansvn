@@ -78,12 +78,7 @@ func run() error {
 
 			fp := filepath.Join(*path, file)
 
-			b, err := common.FileExists(fp)
-			if err != nil {
-				return err
-			}
-
-			if b {
+			if common.FileExists(fp) {
 				if *test {
 					common.Info("delete %s [simulate]", fp)
 				} else {
