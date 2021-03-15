@@ -2,6 +2,6 @@ module github.com/mpetavy/cleansvn
 
 go 1.16
 
-require github.com/mpetavy/common v1.1.96
+require github.com/mpetavy/common v1.1.97
 
 //replace github.com/mpetavy/common => ../common
