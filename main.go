@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	common.Init(false, "1.0.0", "", "2018", "Tool to clean a subversion controlled dir", "mpetavy", fmt.Sprintf("https://github.com/mpetavy/%s", common.Title()), common.APACHE, nil, nil, nil, run, 0)
+	common.Init(false, "1.0.0", "", "", "2018", "Tool to clean a subversion controlled dir", "mpetavy", fmt.Sprintf("https://github.com/mpetavy/%s", common.Title()), common.APACHE, nil, nil, nil, run, 0)
 }
 
 func run() error {
